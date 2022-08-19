@@ -5,7 +5,7 @@ addLayer("k", {
     startData() { return {
         unlocked: true,
 		points: new Decimal(0),
-        time: new Decimal(100),
+        time: new Decimal(200),
         shuzhi: new Decimal(0),
         shitou: new Decimal(0),
         didian: new Decimal(0),
@@ -20,6 +20,13 @@ addLayer("k", {
         flagg: new Decimal(1),
         mmmm: new Decimal(0),
         www: new Decimal(0),
+        sflag: new Decimal(0),
+        tflag: new Decimal(0),
+        tie: new Decimal(0),
+        gu: new Decimal(0),
+        wu: new Decimal(0),
+        wflag: new Decimal(0),
+        gflag: new Decimal(0),
     }},
     color: "#FFFF00",
     requires: new Decimal(1e308), // Can be a function that takes requirement increases into account
@@ -38,16 +45,16 @@ addLayer("k", {
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "1", description: "1", onPress(){if(Math.floor(player.k.mmm)%10!=1){layerDataReset("k");showTab('none')}else{player.points=new Decimal(1e308)}}},
-        {key: "2", description: "2", onPress(){if(Math.floor(player.k.mmm)%10!=2){layerDataReset("k");showTab('none')}else{player.points=new Decimal(1e308)}}},
-        {key: "3", description: "3", onPress(){if(Math.floor(player.k.mmm)%10!=3){layerDataReset("k");showTab('none')}else{player.points=new Decimal(1e308)}}},
-        {key: "4", description: "4", onPress(){if(Math.floor(player.k.mmm)%10!=4){layerDataReset("k");showTab('none')}else{player.points=new Decimal(1e308)}}},
-        {key: "5", description: "5", onPress(){if(Math.floor(player.k.mmm)%10!=5){layerDataReset("k");showTab('none')}else{player.points=new Decimal(1e308)}}},
-        {key: "6", description: "6", onPress(){if(Math.floor(player.k.mmm)%10!=6){layerDataReset("k");showTab('none')}else{player.points=new Decimal(1e308)}}},
-        {key: "7", description: "7", onPress(){if(Math.floor(player.k.mmm)%10!=7){layerDataReset("k");showTab('none')}else{player.points=new Decimal(1e308)}}},
-        {key: "8", description: "8", onPress(){if(Math.floor(player.k.mmm)%10!=8){layerDataReset("k");showTab('none')}else{player.points=new Decimal(1e308)}}},
-        {key: "9", description: "9", onPress(){if(Math.floor(player.k.mmm)%10!=9){layerDataReset("k");showTab('none')}else{player.points=new Decimal(1e308)}}},
-        {key: "0", description: "0", onPress(){if(Math.floor(player.k.mmm)%10!=0){layerDataReset("k");showTab('none')}else{player.points=new Decimal(1e308)}}},
+        {key: "1", description: "1", onPress(){if(Math.floor(player.k.mmm)%10!=1){layerDataReset("k");showTab('none');player.points=new Decimal(0)}else{player.points=new Decimal(1e308)}}},
+        {key: "2", description: "2", onPress(){if(Math.floor(player.k.mmm)%10!=2){layerDataReset("k");showTab('none');player.points=new Decimal(0)}else{player.points=new Decimal(1e308)}}},
+        {key: "3", description: "3", onPress(){if(Math.floor(player.k.mmm)%10!=3){layerDataReset("k");showTab('none');player.points=new Decimal(0)}else{player.points=new Decimal(1e308)}}},
+        {key: "4", description: "4", onPress(){if(Math.floor(player.k.mmm)%10!=4){layerDataReset("k");showTab('none');player.points=new Decimal(0)}else{player.points=new Decimal(1e308)}}},
+        {key: "5", description: "5", onPress(){if(Math.floor(player.k.mmm)%10!=5){layerDataReset("k");showTab('none');player.points=new Decimal(0)}else{player.points=new Decimal(1e308)}}},
+        {key: "6", description: "6", onPress(){if(Math.floor(player.k.mmm)%10!=6){layerDataReset("k");showTab('none');player.points=new Decimal(0)}else{player.points=new Decimal(1e308)}}},
+        {key: "7", description: "7", onPress(){if(Math.floor(player.k.mmm)%10!=7){layerDataReset("k");showTab('none');player.points=new Decimal(0)}else{player.points=new Decimal(1e308)}}},
+        {key: "8", description: "8", onPress(){if(Math.floor(player.k.mmm)%10!=8){layerDataReset("k");showTab('none');player.points=new Decimal(0)}else{player.points=new Decimal(1e308)}}},
+        {key: "9", description: "9", onPress(){if(Math.floor(player.k.mmm)%10!=9){layerDataReset("k");showTab('none');player.points=new Decimal(0)}else{player.points=new Decimal(1e308)}}},
+        {key: "0", description: "0", onPress(){if(Math.floor(player.k.mmm)%10!=0){layerDataReset("k");showTab('none');player.points=new Decimal(0)}else{player.points=new Decimal(1e308)}}},
     ],
     update(diff) {
 		generatePoints("k", this.revenue(diff))
@@ -56,7 +63,7 @@ addLayer("k", {
 	clickables:{
     11:{
         display() {
-            return "拾荒<br>消耗2体力"
+            return "拾荒/开采"
         },
         unlocked(){return true},
         style(){return {"height":"125px"}},
@@ -64,17 +71,25 @@ addLayer("k", {
         onClick(){
             if(player.k.didian==0){
                 player.k.shuzhi=player.k.shuzhi.add(1)
-                player.k.time=player.k.time.sub(2)
+                player.k.time=player.k.time.sub(1)
             }
             else if(player.k.didian==1){
                 player.k.shitou=player.k.shitou.add(1)
                 player.k.time=player.k.time.sub(2)
             }
+            else if(player.k.didian==2){
+                player.k.tie=player.k.tie.add(1)
+                player.k.time=player.k.time.sub(3)
+            }
+            else{
+                player.k.gu=player.k.gu.add(1)
+                player.k.time=player.k.time.sub(4)
+            }
         }
     },
     12:{
         display() {
-            return "去森林<br>消耗1体力"
+            return "去森林<br>消耗1时间"
         },
         unlocked(){return true},
         style(){return {"height":"125px"}},
@@ -86,9 +101,21 @@ addLayer("k", {
     },
     13:{
         display() {
-            return "去溪边<br>消耗1体力"
+            return "制作木稿<br>消耗8树枝"
         },
         unlocked(){return true},
+        style(){return {"height":"125px"}},
+        canClick(){return player.k.shuzhi.gte(8)},
+        onClick(){
+            player.k.shuzhi=player.k.shuzhi.sub(8)
+            player.k.sflag = new Decimal(1)
+        }
+    },
+    14:{
+        display() {
+            return "去溪边<br>消耗1时间"
+        },
+        unlocked(){return player.k.sflag.gte(1)},
         style(){return {"height":"125px"}},
         canClick(){return true},
         onClick(){
@@ -96,18 +123,17 @@ addLayer("k", {
             player.k.didian=1
         }
     },
-    14:{
+    15:{
         display() {
-            return "制作机器<br>消耗7树枝，7石头，20时间<br>2机器以解锁新模块"
+            return "制作石稿<br>消耗4树枝，4石头"
         },
         unlocked(){return true},
         style(){return {"height":"125px"}},
-        canClick(){return player.k.shuzhi.gte(7)&&player.k.shitou.gte(7)},
+        canClick(){return player.k.shuzhi.gte(4)&&player.k.shitou.gte(4)},
         onClick(){
-            player.k.time=player.k.time.sub(20)
-            player.k.shitou=player.k.shitou.sub(7)
-            player.k.shuzhi=player.k.shuzhi.sub(7)
-            player.k.zuizhong=player.k.zuizhong.add(1)
+            player.k.shuzhi=player.k.shuzhi.sub(4)
+            player.k.shitou=player.k.shitou.sub(4)
+            player.k.tflag = new Decimal(1)
         }
     },
     21:{
@@ -131,6 +157,75 @@ addLayer("k", {
         style(){return {"height":"125px"}},
         canClick(){return false},
     },
+    22:{
+        display() {
+            return "去矿洞<br>消耗2时间"
+        },
+        unlocked(){return player.k.tflag.gte(1)},
+        style(){return {"height":"125px"}},
+        canClick(){return true},
+        onClick(){
+            player.k.time=player.k.time.sub(2)
+            player.k.didian=2
+        }
+    },
+    23:{
+        display() {
+            return "制作铁稿<br>消耗4树枝，2石头,3铁"
+        },
+        unlocked(){return player.k.tflag.gte(1)},
+        style(){return {"height":"125px"}},
+        canClick(){return player.k.shuzhi.gte(4)&&player.k.shitou.gte(2)&&player.k.tie.gte(3)},
+        onClick(){
+            player.k.shuzhi=player.k.shuzhi.sub(4)
+            player.k.shitou=player.k.shitou.sub(2)
+            player.k.tie=player.k.tie.sub(3)
+            player.k.gflag = new Decimal(1)
+        }
+    },
+    24:{
+        display() {
+            return "去高级矿洞<br>消耗3时间"
+        },
+        unlocked(){return player.k.gflag.gte(1)},
+        style(){return {"height":"125px"}},
+        canClick(){return true},
+        onClick(){
+            player.k.time=player.k.time.sub(3)
+            player.k.didian=3
+        }
+    },
+    25:{
+        display() {
+            return "制作超级自动采矿机<br>消耗5树枝，3石头,5铁,3钴金"
+        },
+        unlocked(){return player.k.gflag.gte(1)},
+        style(){return {"height":"125px"}},
+        canClick(){return player.k.shuzhi.gte(5)&&player.k.shitou.gte(3)&&player.k.tie.gte(5)&&player.k.gu.gte(3)},
+        onClick(){
+            player.k.shuzhi=player.k.shuzhi.sub(5)
+            player.k.shitou=player.k.shitou.sub(3)
+            player.k.tie=player.k.tie.sub(5)
+            player.k.gu=player.k.gu.sub(3)
+            player.k.wflag = new Decimal(1)
+        }
+    },
+    26:{
+        display() {
+            return "制作计算机器<br>消耗5树枝，5石头,5铁，3钴金，4钨碳，30时间"
+        },
+        unlocked(){return player.k.wflag.gte(1)},
+        style(){return {"height":"125px"}},
+        canClick(){return player.k.shuzhi.gte(5)&&player.k.shitou.gte(5)&&player.k.tie.gte(5)&&player.k.gu.gte(3)&&player.k.wu.gte(3)&&player.k.time.gte(30)},
+        onClick(){
+            player.k.shuzhi=player.k.shuzhi.sub(5)
+            player.k.shitou=player.k.shitou.sub(5)
+            player.k.tie=player.k.tie.sub(5)
+            player.k.gu=player.k.gu.sub(3)
+            player.k.wu=player.k.wu.sub(3)
+            player.k.zuizhong=player.k.zuizhong.add(2)
+        }
+    },
     31:{
         display() {
             return "距离硬重置还有" + format(player.k.jixie)
@@ -152,6 +247,7 @@ addLayer("k", {
         onClick(){
             if(player.k.cmm==0){
                 layerDataReset("k")
+                player.points=new Decimal(0)
             }
             else{
                 player.k.daojishi=new Decimal(20)
@@ -171,6 +267,7 @@ addLayer("k", {
             }
             else{
                 layerDataReset("k")
+                player.points=new Decimal(0)
             }
         }
     },
@@ -203,10 +300,22 @@ addLayer("k", {
                 function() { return '你有' + format(player.k.shitou) + '石头'},
                 { "color": "#545454", "font-size": "24px",}
             ],
+            ["display-text",
+                function() { return '你有' + format(player.k.tie) + '铁'},
+                { "color": "#DDDDDD", "font-size": "24px",}
+            ],
+            ["display-text",
+                function() { return '你有' + format(player.k.gu) + '钴金'},
+                { "color": "#00FF99", "font-size": "24px",}
+            ],
+            ["display-text",
+                function() { return '你有' + format(player.k.wu) + '钨碳'},
+                { "color": "#00FFFF", "font-size": "24px",}
+            ],
             "blank",
             "blank",
             "blank",
-            ["row",[["clickable", 11],["clickable", 12],["clickable", 13],["clickable", 14]]],
+            ["row",[["clickable", 11],["clickable", 12],["clickable", 13],["clickable", 14],["clickable", 15],["clickable", 22],["clickable", 23],["clickable", 24],["clickable", 25],["clickable", 26]]],
             ],
         },
         机械: {
@@ -236,7 +345,6 @@ addLayer("k", {
         },
     },
     revenue(diff) {
-        player.k.time=player.k.time.sub(0.003)
         player.k.jixie=player.k.jixie.sub(0.05)
         player.k.jiange=player.k.jiange.sub(0.025)
         player.k.daojishi=player.k.daojishi.sub(0.025)
@@ -245,16 +353,25 @@ addLayer("k", {
             player.k.jiange=new Decimal(20)
         }
         if(player.k.daojishi<0){
+            player.points=new Decimal(0)
             layerDataReset("k")
             showTab('none')
         }
         if(player.k.time<0){
+            player.points=new Decimal(0)
             layerDataReset("k")
             showTab('none')
         }
         if(player.k.jixie<0){
+            player.points=new Decimal(0)
             layerDataReset("k")
             showTab('none')
+        }
+        if(player.points<1e308){
+            player.k.time=player.k.time.sub(0.003)
+        }
+        if(player.k.wflag==1){
+            player.k.wu=player.k.wu.add(0.003)
         }
     },
 })
