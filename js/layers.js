@@ -13,7 +13,7 @@ addLayer("k", {
         jixie: new Decimal(20),
         zuizhong: new Decimal(0),
         daojishi: new Decimal(20),
-        jiange: new Decimal(5),
+        jiange: new Decimal(30),
         flag: new Decimal(1),
         cmm: new Decimal(0),
         mmm: new Decimal(0),
@@ -250,7 +250,7 @@ addLayer("k", {
                 player.points=new Decimal(0)
             }
             else{
-                player.k.daojishi=new Decimal(20)
+                player.k.daojishi=new Decimal(30)
             }
         }
     },
@@ -263,7 +263,7 @@ addLayer("k", {
         canClick(){return player.k.daojishi<21},
         onClick(){
             if(player.k.cmm==0){
-                player.k.daojishi=new Decimal(20)
+                player.k.daojishi=new Decimal(30)
             }
             else{
                 layerDataReset("k")
@@ -350,7 +350,7 @@ addLayer("k", {
         player.k.daojishi=player.k.daojishi.sub(0.025)
         if(player.k.jiange<0){
             player.k.flag=1
-            player.k.jiange=new Decimal(20)
+            player.k.jiange=new Decimal(30)
         }
         if(player.k.daojishi<0){
             player.points=new Decimal(0)
